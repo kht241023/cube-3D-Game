@@ -1,25 +1,30 @@
-import logo from './logo.svg';
-import './App.css';
+import React, { useState } from 'react';
+import { Canvas } from '@react-three/fiber';
+import { OrbitControls } from '@react-three/drei';
 
-function App() {
+function Box() {
+  const [color, setColor] = useState('orange');
+
+  const handleClick = () => {
+    const randomColor = '#' + Math.floor(Math.random() * 16777215).toString(16);
+    setColor(randomColor);
+  };
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+      <mesh onClick={handleClick} position={[0, 0, 0]}>
+        <boxGeometry args={[1, 1, 1]} />
+        <meshStandardMaterial color={color} />
+      </mesh>
   );
 }
 
-export default App;
+export default function App() {
+  return (
+      <Canvas camera={{ position: [2, 2, 5], fov: 60 }}>
+        <ambientLight intensity={0.5} />
+        <pointLight position={[10, 10, 10]} />
+        <Box />
+        <OrbitControls />
+      </Canvas>
+  );
+}
